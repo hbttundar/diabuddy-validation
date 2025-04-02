@@ -4,6 +4,7 @@ package validation
 type FieldValidator struct {
 	validator *Validator
 	field     string
+	value     any
 }
 
 // AddRule adds a validation rule to the field.

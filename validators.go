@@ -3,6 +3,7 @@ package validation
 // Validator dynamically validates fields against rules.
 type Validator struct {
 	fields map[string][]Rule
+	values map[string]any
 	errors []ValidationError
 }
 
@@ -10,15 +11,18 @@ type Validator struct {
 func NewValidator() *Validator {
 	return &Validator{
 		fields: make(map[string][]Rule),
+		values: make(map[string]any),
 		errors: []ValidationError{},
 	}
 }
 
 // ForField defines rules for a specific field.
-func (v *Validator) ForField(field string) *FieldValidator {
+func (v *Validator) ForField(field string, value any) *FieldValidator {
+	v.values[field] = value
 	return &FieldValidator{
 		validator: v,
 		field:     field,
+		value:     value,
 	}
 }
 
@@ -26,7 +30,7 @@ func (v *Validator) ForField(field string) *FieldValidator {
 func (v *Validator) Validate() {
 	for field, rules := range v.fields {
 		for _, rule := range rules {
-			if err := rule.Validate(field); err != nil {
+			if err := rule.Validate(v.values[field]); err != nil {
 				v.errors = append(v.errors, ValidationError{
 					Field:   field,
 					Message: err.Error(),
