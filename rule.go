@@ -5,6 +5,7 @@ import "github.com/hbttundar/diabuddy-errors"
 // Rule interface defines the behavior of a validation rule.
 type Rule interface {
 	Validate(value any) errors.ApiErrors
+	ValidationErrorMessage(baseMessage string) string
 	Message() string
 }
 
