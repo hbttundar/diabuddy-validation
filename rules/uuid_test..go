@@ -11,15 +11,16 @@ func TestUuidRule(t *testing.T) {
 	tests := []struct {
 		name      string
 		uuid      uuid.UUID
+		fieldname string
 		expectErr bool
 	}{
-		{"Valid UUID", uuid.New(), false},
-		{"Nil UUID", uuid.Nil, true},
+		{"Valid UUID", uuid.New(), "customerId", false},
+		{"Nil UUID", uuid.Nil, "orderId", true},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rule := UuidRule{}
+			rule := UuidRule{tt.fieldname}
 			err := rule.Validate(tt.uuid)
 			if tt.expectErr {
 				assert.NotNil(t, err, "expected error but got nil")

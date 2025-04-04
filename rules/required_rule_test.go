@@ -7,21 +7,21 @@ import (
 )
 
 func TestRequiredRule(t *testing.T) {
-	rule := RequiredRule{}
-
 	tests := []struct {
 		name      string
 		input     any
+		fieldname string
 		expectErr bool
 	}{
-		{"Valid string", "hello", false},
-		{"Empty string", "", true},
-		{"Nil value", nil, true},
-		{"Valid list", []int{1, 2, 3}, false},
-		{"Empty list", []int{}, true},
+		{"Valid string", "hello", "comment", false},
+		{"Empty string", "", "lastname", true},
+		{"Nil value", nil, "firstname", true},
+		{"Valid list", []int{1, 2, 3}, "orders", false},
+		{"Empty list", []int{}, "customers", true},
 	}
 
 	for _, tt := range tests {
+		rule := RequiredRule{FieldName: tt.fieldname}
 		t.Run(tt.name, func(t *testing.T) {
 			err := rule.Validate(tt.input)
 			if tt.expectErr {
