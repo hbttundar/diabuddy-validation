@@ -14,7 +14,7 @@ type UuidRule struct {
 func (u UuidRule) Validate(value any) errors.ApiErrors {
 	id, ok := value.(uuid.UUID)
 	if !ok {
-		return errors.NewApiError(errors.BadRequestErrorType, u.ValidationErrorMessage("has invalid UUID format"))
+		return errors.NewApiError(errors.BadRequestErrorType, u.ValidationErrorMessage("has invalid value as UUID"))
 	}
 	if id == uuid.Nil {
 		return errors.NewApiError(errors.BadRequestErrorType, u.ValidationErrorMessage("cannot be nil as a UUID"))
